@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>智能IQ测试 - 专业智商评估</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  
+  <!-- Tailwind CSS 配置 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#3B82F6',
+            secondary: '#6366F1',
+            accent: '#8B5CF6',
+            success: '#10B981',
+            warning: '#F59E0B',
+            danger: '#EF4444',
+            dark: '#1E293B',
+            light: '#F8FAFC'
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      }
+    }
+  </script>
+  
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .text-shadow {
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+      .bg-gradient-primary {
+        background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
+      }
+      .card-hover {
+        transition: all 0.3s ease;
+      }
+      .card-hover:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      }
+      .progress-bar {
+        transition: width 0.5s ease-in-out;
+      }
+      .option-hover {
+        transition: all 0.2s ease;
+      }
+      .option-hover:hover {
+        background-color: rgba(59, 130, 246, 0.1);
+        border-color: #3B82F6;
+      }
+    }
+  </style>
+</head>
+<body class="bg-light font-sans text-dark min-h-screen flex flex-col">
+  <!-- 导航栏 -->
+  <header class="sticky top-0 z-50 bg-white shadow-sm transition-all duration-300">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+      <div class="flex items-center space-x-2">
+        <i class="fa fa-brain text-primary text-2xl"></i>
+        <h1 class="text-xl font-bold text-dark">智能IQ测试</h1>
+      </div>
+      <nav class="hidden md:flex items-center space-x-6">
+        <a href="#" class="text-dark hover:text-primary transition-colors">首页</a>
+        <a href="#" class="text-dark hover:text-primary transition-colors">测试介绍</a>
+        <a href="#" class="text-dark hover:text-primary transition-colors">常见问题</a>
+        <a href="#" class="text-dark hover:text-primary transition-colors">联系我们</a>
+      </nav>
+      <button class="md:hidden text-dark">
+        <i class="fa fa-bars text-xl"></i>
+      </button>
+    </div>
+  </header>
+
+  <main class="flex-grow">
+    <!-- 欢迎界面 -->
+    <section id="welcome-screen" class="py-16 px-4">
+      <div class="container mx-auto max-w-4xl">
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+          <div class="bg-gradient-primary p-8 text-white">
+            <h2 class="text-3xl font-bold mb-4">欢迎参加智能IQ测试</h2>
+            <p class="text-lg opacity-90">这是一个专业的智商评估测试，包含多种类型的题目，将全面评估您的认知能力。</p>
+          </div>
+          <div class="p-8">
+            <div class="mb-6">
+              <h3 class="text-xl font-semibold mb-3 flex items-center">
+                <i class="fa fa-info-circle text-primary mr-2"></i>测试说明
+              </h3>
+              <ul class="space-y-2 text-gray-700">
+                <li class="flex items-start">
+                  <i class="fa fa-check-circle text-success mt-1 mr-2"></i>
+                  <span>测试包含20个问题，涵盖逻辑推理、数学能力、空间想象等多个方面</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fa fa-check-circle text-success mt-1 mr-2"></i>
+                  <span>每个问题有多个选项，请选择您认为正确的答案</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fa fa-check-circle text-success mt-1 mr-2"></i>
+                  <span>测试时间为30分钟，请合理安排答题时间</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fa fa-check-circle text-success mt-1 mr-2"></i>
+                  <span>完成后将立即获得详细的测试结果和分析报告</span>
+                </li>
+              </ul>
+            </div>
+            
+            <div class="mb-8">
+              <h3 class="text-xl font-semibold mb-3 flex items-center">
+                <i class="fa fa-clock-o text-warning mr-2"></i>重要提示
+              </h3>
+              <p class="text-gray-700">请在安静、专注的环境中进行测试，避免干扰。测试结果仅供参考，不能完全代表您的全部能力。</p>
+            </div>
+            
+            <div class="flex justify-center">
+              <button id="start-test-btn" class="bg-primary hover:bg-primary/90 text-white font-medium py-3 px-8 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105 flex items-center">
+                <i class="fa fa-play-circle mr-2"></i>
+                开始测试
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 测试界面 -->
+    <section id="test-screen" class="py-16 px-4 hidden">
+      <div class="container mx-auto max-w-4xl">
+        <!-- 进度条 -->
+        <div class="mb-6 bg-gray-200 rounded-full h-3 overflow-hidden">
+          <div id="progress-bar" class="bg-primary h-full rounded-full progress-bar" style="width: 0%"></div>
+        </div>
+        
+        <!-- 顶部信息 -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+          <div class="flex items-center mb-4 md:mb-0">
+            <span id="question-counter" class="text-xl font-semibold text-primary">问题 1/20</span>
+          </div>
+          <div class="flex items-center space-x-4">
+            <div class="flex items-center">
+              <i class="fa fa-clock-o text-warning mr-2"></i>
+              <span id="timer" class="text-lg font-medium">30:00</span>
+            </div>
+            <button id="end-test-btn" class="text-danger hover:text-danger/80 transition-colors">
+              <i class="fa fa-times-circle mr-1"></i>结束测试
+            </button>
+          </div>
+        </div>
+        
+        <!-- 问题卡片 -->
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+          <div id="question-container" class="p-8">
+            <!-- 问题将通过JavaScript动态加载 -->
+          </div>
+        </div>
+        
+        <!-- 导航按钮 -->
+        <div class="mt-8 flex justify-between">
+          <button id="prev-btn" class="hidden bg-gray-200 hover:bg-gray-300 text-dark font-medium py-2 px-6 rounded-lg transition-colors flex items-center">
+            <i class="fa fa-arrow-left mr-2"></i>上一题
+          </button>
+          <button id="next-btn" class="bg-primary hover:bg-primary/90 text-white font-medium py-2 px-6 rounded-lg transition-colors flex items-center">
+            下一题<i class="fa fa-arrow-right ml-2"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 结果界面 -->
+    <section id="result-screen" class="py-16 px-4 hidden">
+      <div class="container mx-auto max-w-4xl">
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+          <div class="bg-gradient-primary p-8 text-white text-center">
+            <h2 class="text-3xl font-bold mb-2">测试完成！</h2>
+            <p class="text-lg opacity-90">感谢您完成测试，以下是您的详细结果</p>
+          </div>
+          
+          <div class="p-8">
+            <!-- 总分展示 -->
+            <div class="mb-8 text-center">
+              <div class="relative inline-block">
+                <div class="w-48 h-48 rounded-full bg-gray-100 flex items-center justify-center">
+                  <div id="score-display" class="text-5xl font-bold text-primary">0</div>
+                </div>
+                <div class="absolute -bottom-2 -right-2 bg-accent text-white text-sm font-bold px-3 py-1 rounded-full">
+                  IQ得分
+                </div>
+              </div>
+              <p id="score-description" class="mt-4 text-xl text-gray-700">正在计算您的得分...</p>
+            </div>
+            
+            <!-- 能力雷达图 -->
+            <div class="mb-8">
+              <h3 class="text-xl font-semibold mb-4 text-center">能力分析</h3>
+              <div class="h-64 bg-gray-50 rounded-xl flex items-center justify-center">
+                <canvas id="radar-chart"></canvas>
+              </div>
+            </div>
+            
+            <!-- 详细分析 -->
+            <div class="mb-8">
+              <h3 class="text-xl font-semibold mb-4">详细分析</h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-blue-50 rounded-lg p-4 card-hover">
+                  <h4 class="font-medium text-primary mb-2 flex items-center">
+                    <i class="fa fa-lightbulb-o mr-2"></i>逻辑推理
+                  </h4>
+                  <div class="flex items-center">
+                    <div class="w-full bg-gray-200 rounded-full h-2.5 mr-2">
+                      <div id="logic-score" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
+                    </div>
+                    <span id="logic-text" class="text-sm font-medium text-gray-700">--</span>
+                  </div>
+                </div>
+                <div class="bg-purple-50 rounded-lg p-4 card-hover">
+                  <h4 class="font-medium text-purple-600 mb-2 flex items-center">
+                    <i class="fa fa-calculator mr-2"></i>数学能力
+                  </h4>
+                  <div class="flex items-center">
+                    <div class="w-full bg-gray-200 rounded-full h-2.5 mr-2">
+                      <div id="math-score" class="bg-purple-600 h-2.5 rounded-full" style="width: 0%"></div>
+                    </div>
+                    <span id="math-text" class="text-sm font-medium text-gray-700">--</span>
+                  </div>
+                </div>
+                <div class="bg-green-50 rounded-lg p-4 card-hover">
+                  <h4 class="font-medium text-green-600 mb-2 flex items-center">
+                    <i class="fa fa-cubes mr-2"></i>空间想象
+                  </h4>
+                  <div class="flex items-center">
+                    <div class="w-full bg-gray-200 rounded-full h-2.5 mr-2">
+                      <div id="spatial-score" class="bg-green-600 h-2.5 rounded-full" style="width: 0%"></div>
+                    </div>
+                    <span id="spatial-text" class="text-sm font-medium text-gray-700">--</span>
+                  </div>
+                </div>
+                <div class="bg-yellow-50 rounded-lg p-4 card-hover">
+                  <h4 class="font-medium text-yellow-600 mb-2 flex items-center">
+                    <i class="fa fa-puzzle-piece mr-2"></i>问题解决
+                  </h4>
+                  <div class="flex items-center">
+                    <div class="w-full bg-gray-200 rounded-full h-2.5 mr-2">
+                      <div id="problem-solving-score" class="bg-yellow-600 h-2.5 rounded-full" style="width: 0%"></div>
+                    </div>
+                    <span id="problem-solving-text" class="text-sm font-medium text-gray-700">--</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- 建议 -->
+            <div class="bg-gray-50 rounded-xl p-6">
+              <h3 class="text-xl font-semibold mb-3 flex items-center">
+                <i class="fa fa-line-chart text-accent mr-2"></i>提升建议
+              </h3>
+              <ul id="suggestions" class="space-y-2 text-gray-700">
+                <li class="flex items-start">
+                  <i class="fa fa-star text-warning mt-1 mr-2"></i>
+                  <span>根据您的测试结果，我们建议您可以通过以下方式提升您的认知能力...</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 操作按钮 -->
+        <div class="mt-8 flex justify-center space-x-4">
+          <button id="restart-test-btn" class="bg-primary hover:bg-primary/90 text-white font-medium py-3 px-6 rounded-lg shadow-lg transition-all duration-300">
+            <i class="fa fa-refresh mr-2"></i>重新测试
+          </button>
+          <button id="share-result-btn" class="bg-accent hover:bg-accent/90 text-white font-medium py-3 px-6 rounded-lg shadow-lg transition-all duration-300">
+            <i class="fa fa-share-alt mr-2"></i>分享结果
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-dark text-white py-8">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <div class="mb-4 md:mb-0">
+          <div class="flex items-center space-x-2">
+            <i class="fa fa-brain text-primary text-2xl"></i>
+            <span class="text-xl font-bold">智能IQ测试</span>
+          </div>
+          <p class="text-gray-400 mt-2">专业的智商评估平台</p>
+        </div>
+        <div class="flex space-x-6">
+          <a href="#" class="text-gray-400 hover:text-white transition-colors">
+            <i class="fa fa-facebook"></i>
+          </a>
+          <a href="#" class="text-gray-400 hover:text-white transition-colors">
+            <i class="fa fa-twitter"></i>
+          </a>
+          <a href="#" class="text-gray-400 hover:text-white transition-colors">
+            <i class="fa fa-instagram"></i>
+          </a>
+          <a href="#" class="text-gray-400 hover:text-white transition-colors">
+            <i class="fa fa-linkedin"></i>
+          </a>
+        </div>
+      </div>
+      <div class="border-t border-gray-800 mt-6 pt-6 text-center text-gray-400">
+        <p>© 2025 智能IQ测试. 保留所有权利.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 引入Chart.js用于绘制雷达图 -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+  
+  <script>
+    // 测试问题数据
+    const questions = [
+      {
+        id: 1,
+        type: "logic",
+        question: "以下数列中缺失的数字是：2, 4, 8, 16, ?",
+        options: [
+          { text: "24", correct: false },
+          { text: "32", correct: true },
+          { text: "30", correct: false },
+          { text: "36", correct: false }
+        ],
+        explanation: "这是一个等比数列，每个数字都是前一个数字的2倍。"
+      },
+      {
+        id: 2,
+        type: "math",
+        question: "如果3x + 7 = 22，那么x的值是多少？",
+        options: [
+          { text: "5", correct: true },
+          { text: "6", correct: false },
+          { text: "7", correct: false },
+          { text: "8", correct: false }
+        ],
+        explanation: "3x = 22 - 7 = 15，所以x = 15 ÷ 3 = 5。"
+      },
+      {
+        id: 3,
+        type: "spatial",
+        question: "在以下图形中，哪一个与其他三个不同？",
+        options: [
+          { text: "圆形", correct: false },
+          { text: "三角形", correct: true },
+          { text: "正方形", correct: false },
+          { text: "长方形", correct: false }
+        ],
+        explanation: "三角形有三条边，而其他图形都有四条边。"
+      },
+      {
+        id: 4,
+        type: "logic",
+        question: "如果所有的狗都是动物，所有的动物都需要水，那么：",
+        options: [
+          { text: "所有的狗都需要水", correct: true },
+          { text: "所有需要水的都是狗", correct: false },
+          { text: "狗比其他动物更需要水", correct: false },
+          { text: "动物比狗更需要水", correct: false }
+        ],
+        explanation: "这是一个简单的三段论推理：如果A是B，B是C，那么A是C。"
+      },
+      {
+        id: 5,
+        type: "math",
+        question: "一个长方形的长是宽的2倍，周长是30厘米，那么这个长方形的面积是多少？",
+        options: [
+          { text: "50平方厘米", correct: true },
+          { text: "100平方厘米", correct: false },
+          { text: "75平方厘米", correct: false },
+          { text: "150平方厘米", correct: false }
+        ],
+        explanation: "设宽为x，则长为2x，周长为2(x + 2x) = 6x = 30，所以x = 5，长为10，面积为5×10=50。"
+      },
+      {
+        id: 6,
+        type: "spatial",
+        question: "将一个立方体展开成平面图形，以下哪个选项是不可能的？",
+        options: [
+          { text: "十字形", correct: false },
+          { text: "T字形", correct: false },
+          { text: "L字形", correct: false },
+          { text: "一字形", correct: true }
+        ],
+        explanation: "立方体展开后，一字形排列六个面是不可能的，因为中间四个面两侧各有一个面。"
+      },
+      {
+        id: 7,
+        type: "logic",
+        question: "以下哪个词与其他三个词不属于同一类别？",
+        options: [
+          { text: "苹果", correct: false },
+          { text: "香蕉", correct: false },
+          { text: "胡萝卜", correct: true },
+          { text: "橙子", correct: false }
+        ],
+        explanation: "胡萝卜是蔬菜，而其他三个都是水果。"
+      },
+      {
+        id: 8,
+        type: "math",
+        question: "如果今天是星期三，那么100天后是星期几？",
+        options: [
+          { text: "星期五", correct: true },
+          { text: "星期六", correct: false },
+          { text: "星期日", correct: false },
+          { text: "星期一", correct: false }
+        ],
+        explanation: "100 ÷ 7 = 14余2，所以从星期三向后推2天是星期五。"
+      },
+      {
+        id: 9,
+        type: "spatial",
+        question: "在以下序列中，下一个图形应该是什么？(□, △, ○, □, △, ?)",
+        options: [
+          { text: "□", correct: false },
+          { text: "△", correct: false },
+          { text: "○", correct: true },
+          { text: "◇", correct: false }
+        ],
+        explanation: "这是一个循环序列：正方形、三角形、圆形，不断重复。"
+      },
+      {
+        id: 10,
+        type: "logic",
+        question: "如果A比B高，B比C高，那么：",
+        options: [
+          { text: "A比C高", correct: true },
+          { text: "C比A高", correct: false },
+          { text: "A和C一样高", correct: false },
+          { text: "无法确定", correct: false }
+        ],
+        explanation: "这是一个传递关系：如果A > B且B > C，那么A > C。"
+      },
+      {
+        id: 11,
+        type: "math",
+        question: "一个数的30%是15，这个数是多少？",
+        options: [
+          { text: "50", correct: true },
+          { text: "45", correct: false },
+          { text: "60", correct: false },
+          { text: "30", correct: false }
+        ],
+        explanation: "设这个数为x，则0.3x = 15，所以x = 15 ÷ 0.3 = 50。"
+      },
+      {
+        id: 12,
+        type: "spatial",
+        question: "以下哪个图形可以通过旋转得到目标图形？",
+        options: [
+          { text: "选项A", correct: false },
+          { text: "选项B", correct: true },
+          { text: "选项C", correct: false },
+          { text: "选项D", correct: false }
+        ],
+        explanation: "只有选项B可以通过旋转得到目标图形，其他选项需要翻转。"
+      },
+      {
+        id: 13,
+        type: "logic",
+        question: "如果所有的鸟都会飞，企鹅是鸟，那么：",
+        options: [
+          { text: "企鹅会飞", correct: true },
+          { text: "企鹅不会飞", correct: false },
+          { text: "有些鸟不会飞", correct: false },
+          { text: "无法确定", correct: false }
+        ],
+        explanation: "这是一个逻辑推理题，不考虑现实情况。根据前提，如果所有鸟都会飞，而企鹅是鸟，那么企鹅会飞。"
+      },
+      {
+        id: 14,
+        type: "math",
+        question: "计算：(5 + 3) × (7 - 2) = ?",
+        options: [
+          { text: "40", correct: true },
+          { text: "26", correct: false },
+          { text: "36", correct: false },
+          { text: "46", correct: false }
+        ],
+        explanation: "先计算括号内的内容：5 + 3 = 8，7 - 2 = 5，然后相乘：8 × 5 = 40。"
+      },
+      {
+        id: 15,
+        type: "spatial",
+        question: "以下哪个是左侧图形的镜像？",
+        options: [
+          { text: "选项A", correct: false },
+          { text: "选项B", correct: false },
+          { text: "选项C", correct: true },
+          { text: "选项D", correct: false }
+        ],
+        explanation: "选项C是左侧图形的水平镜像，左右翻转。"
+      },
+      {
+        id: 16,
+        type: "logic",
+        question: "在以下序列中，下一个数字应该是什么？(1, 3, 6, 10, 15, ?)",
+        options: [
+          { text: "21", correct: true },
+          { text: "20", correct: false },
+          { text: "22", correct: false },
+          { text: "19", correct: false }
+        ],
+        explanation: "这是一个三角数序列，每次增加的数比前一次多1：1+2=3，3+3=6，6+4=10，10+5=15，15+6=21。"
+      },
+      {
+        id: 17,
+        type: "math",
+        question: "一个正方形的对角线长度是10厘米，那么它的面积是多少？",
+        options: [
+          { text: "50平方厘米", correct: true },
+          { text: "100平方厘米", correct: false },
+          { text: "25平方厘米", correct: false },
+          { text: "75平方厘米", correct: false }
+        ],
+        explanation: "正方形面积 = 对角线² ÷ 2 = 10² ÷ 2 = 100 ÷ 2 = 50平方厘米。"
+      },
+      {
+        id: 18,
+        type: "spatial",
+        question: "将以下图形折叠后，可以得到什么立体图形？",
+        options: [
+          { text: "立方体", correct: true },
+          { text: "金字塔", correct: false },
+          { text: "圆柱体", correct: false },
+          { text: "圆锥体", correct: false }
+        ],
+        explanation: "该图形是立方体的展开图，折叠后可以得到一个立方体。"
+      },
+      {
+        id: 19,
+        type: "logic",
+        question: "如果'APPLE'编码为'ELPPA'，那么'COMPUTER'应该编码为什么？",
+        options: [
+          { text: "RETUPMOC", correct: true },
+          { text: "COMPRETU", correct: false },
+          { text: "UTERMCOP", correct: false },
+          { text: "MOCRETUP", correct: false }
+        ],
+        explanation: "编码规则是将单词倒序排列：APPLE → ELPPA，所以COMPUTER → RETUPMOC。"
+      },
+      {
+        id: 20,
+        type: "math",
+        question: "如果x² - 5x + 6 = 0，那么x的值是多少？",
+        options: [
+          { text: "2或3", correct: true },
+          { text: "1或6", correct: false },
+          { text: "-2或-3", correct: false },
+          { text: "-1或-6", correct: false }
+        ],
+        explanation: "这是一个二次方程，可以分解为(x-2)(x-3)=0，所以x=2或x=3。"
+      }
+    ];
+
+    // 全局变量
+    let currentQuestionIndex = 0;
+    let userAnswers = {};
+    let timer;
+    let timeLeft = 30 * 60; // 30分钟，以秒为单位
+
+    // DOM元素
+    const welcomeScreen = document.getElementById('welcome-screen');
+    const testScreen = document.getElementById('test-screen');
+    const resultScreen = document.getElementById('result-screen');
+    const startTestBtn = document.getElementById('start-test-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const prevBtn = document.getElementById('prev-btn');
+    const endTestBtn = document.getElementById('end-test-btn');
+    const restartTestBtn = document.getElementById('restart-test-btn');
+    const shareResultBtn = document.getElementById('share-result-btn');
+    const questionContainer = document.getElementById('question-container');
+    const progressBar = document.getElementById('progress-bar');
+    const questionCounter = document.getElementById('question-counter');
+    const timerElement = document.getElementById('timer');
+
+    // 初始化测试
+    function initTest() {
+      currentQuestionIndex = 0;
+      userAnswers = {};
+      timeLeft = 30 * 60;
+      updateProgress();
+      loadQuestion(currentQuestionIndex);
+      startTimer();
+    }
+
+    // 开始测试
+    startTestBtn.addEventListener('click', () => {
+      welcomeScreen.classList.add('hidden');
+      testScreen.classList.remove('hidden');
+      initTest();
+    });
+
+    // 下一题
+    nextBtn.addEventListener('click', () => {
+      if (currentQuestionIndex < questions.length - 1) {
+        currentQuestionIndex++;
+        updateProgress();
+        loadQuestion(currentQuestionIndex);
+      } else {
+        endTest();
+      }
+    });
+
+    // 上一题
+    prevBtn.addEventListener('click', () => {
+      if (currentQuestionIndex > 0) {
+        currentQuestionIndex--;
+        updateProgress();
+        loadQuestion(currentQuestionIndex);
+      }
+    });
+
+    // 结束测试
+    endTestBtn.addEventListener('click', () => {
+      if (confirm('确定要结束测试吗？您的答案将被保存并计算得分。')) {
+        endTest();
+      }
+    });
+
+    // 重新开始测试
+    restartTestBtn.addEventListener('click', () => {
+      resultScreen.classList.add('hidden');
+      welcomeScreen.classList.remove('hidden');
+    });
+
+    // 分享结果
+    shareResultBtn.addEventListener('click', () => {
+      alert('分享功能即将上线，敬请期待！');
+    });
+
+    // 更新进度条和问题计数器
+    function updateProgress() {
+      const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
+      progressBar.style.width = `${progress}%`;
+      questionCounter.textContent = `问题 ${currentQuestionIndex + 1}/${questions.length}`;
+      
+      // 更新导航按钮状态
+      if (currentQuestionIndex === 0) {
+        prevBtn.classList.add('hidden');
+      } else {
+        prevBtn.classList.remove('hidden');
+      }
+      
+      if (currentQuestionIndex === questions.length - 1) {
+        nextBtn.innerHTML = '<i class="fa fa-check-circle mr-2"></i>完成测试';
+      } else {
+        nextBtn.innerHTML = '下一题<i class="fa fa-arrow-right ml-2"></i>';
+      }
+    }
+
+    // 加载问题
+    function loadQuestion(index) {
+      const question = questions[index];
+      let optionsHtml = '';
+      
+      // 生成选项
+      question.options.forEach((option, optionIndex) => {
+        const isSelected = userAnswers[question.id] === optionIndex;
+        optionsHtml += `
+          <div class="mb-3">
+            <label class="flex items-center p-3 border rounded-lg cursor-pointer option-hover ${isSelected ? 'border-primary bg-blue-50' : 'border-gray-200'}">
+              <input type="radio" name="answer" value="${optionIndex}" class="mr-3 h-5 w-5 text-primary focus:ring-primary" ${isSelected ? 'checked' : ''}>
+              <span class="text-gray-800">${String.fromCharCode(65 + optionIndex)}. ${option.text}</span>
+            </label>
+          </div>
+        `;
+      });
+      
+      // 生成问题HTML
+      const questionHtml = `
+        <div class="mb-6">
+          <h3 class="text-2xl font-semibold mb-4">${question.question}</h3>
+          <div class="options">${optionsHtml}</div>
+        </div>
+      `;
+      
+      questionContainer.innerHTML = questionHtml;
+      
+      // 添加选项点击事件
+      const radioInputs = questionContainer.querySelectorAll('input[type="radio"]');
+      radioInputs.forEach(input => {
+        input.addEventListener('change', () => {
+          userAnswers[question.id] = parseInt(input.value);
+        });
+      });
+    }
+
+    // 开始计时器
+    function startTimer() {
+      clearInterval(timer);
+      updateTimerDisplay();
+      
+      timer = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          alert('时间到！测试将自动结束。');
+          endTest();
+        }
+      }, 1000);
+    }
+
+    // 更新计时器显示
+    function updateTimerDisplay() {
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+      timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+      
+      // 当剩余时间少于5分钟时，改变颜色
+      if (timeLeft < 5 * 60) {
+        timerElement.classList.add('text-danger');
+        timerElement.classList.remove('text-warning');
+      }
+    }
+
+    // 结束测试并显示结果
+    function endTest() {
+      clearInterval(timer);
+      testScreen.classList.add('hidden');
+      resultScreen.classList.remove('hidden');
+      calculateResults();
+    }
+
+    // 计算测试结果
+    function calculateResults() {
+      let totalScore = 0;
+      let logicScore = 0;
+      let mathScore = 0;
+      let spatialScore = 0;
+      let logicCount = 0;
+      let mathCount = 0;
+      let spatialCount = 0;
+      
+      // 计算各类型题目的得分
+      questions.forEach(question => {
+        const userAnswerIndex = userAnswers[question.id];
+        
+        if (userAnswerIndex !== undefined) {
+          const isCorrect = question.options[userAnswerIndex].correct;
+          
+          if (isCorrect) {
+            totalScore++;
+            
+            switch (question.type) {
+              case 'logic':
+                logicScore++;
+                break;
+              case 'math':
+                mathScore++;
+                break;
+              case 'spatial':
+                spatialScore++;
+                break;
+            }
+          }
+        }
+        
+        // 统计各类题型总数
+        switch (question.type) {
+          case 'logic':
+            logicCount++;
+            break;
+          case 'math':
+            mathCount++;
+            break;
+          case 'spatial':
+            spatialCount++;
+            break;
+        }
+      });
+      
+      // 计算IQ得分（简化版公式）
+      const percentage = (totalScore / questions.length) * 100;
+      const iqScore = 100 + (percentage - 50) * 1.5; // 假设平均分为100
+      
+      // 计算各类能力得分百分比
+      const logicPercentage = logicCount > 0 ? (logicScore / logicCount) * 100 : 0;
+      const mathPercentage = mathCount > 0 ? (mathScore / mathCount) * 100 : 0;
+      const spatialPercentage = spatialCount > 0 ? (spatialScore / spatialCount) * 100 : 0;
+      const problemSolvingPercentage = (totalScore / questions.length) * 100;
+      
+      // 更新结果显示
+      document.getElementById('score-display').textContent = Math.round(iqScore);
+      
+      // 设置得分描述
+      let scoreDescription = '';
+      if (iqScore < 70) {
+        scoreDescription = '您的IQ得分处于较低水平';
+      } else if (iqScore < 85) {
+        scoreDescription = '您的IQ得分处于偏低水平';
+      } else if (iqScore < 115) {
+        scoreDescription = '您的IQ得分处于平均水平';
+      } else if (iqScore < 130) {
+        scoreDescription = '您的IQ得分处于较高水平';
+      } else {
+        scoreDescription = '您的IQ得分处于极高水平';
+      }
+      document.getElementById('score-description').textContent = scoreDescription;
+      
+      // 更新能力分析条
+      document.getElementById('logic-score').style.width = `${logicPercentage}%`;
+      document.getElementById('logic-text').textContent = `${Math.round(logicPercentage)}%`;
+      
+      document.getElementById('math-score').style.width = `${mathPercentage}%`;
+      document.getElementById('math-text').textContent = `${Math.round(mathPercentage)}%`;
+      
+      document.getElementById('spatial-score').style.width = `${spatialPercentage}%`;
+      document.getElementById('spatial-text').textContent = `${Math.round(spatialPercentage)}%`;
+      
+      document.getElementById('problem-solving-score').style.width = `${problemSolvingPercentage}%`;
+      document.getElementById('problem-solving-text').textContent = `${Math.round(problemSolvingPercentage)}%`;
+      
+      // 生成提升建议
+      generateSuggestions(logicPercentage, mathPercentage, spatialPercentage);
+      
+      // 绘制雷达图
+      drawRadarChart(logicPercentage, mathPercentage, spatialPercentage, problemSolvingPercentage);
+    }
+
+    // 生成提升建议
+    function generateSuggestions(logic, math, spatial) {
+      const suggestionsList = document.getElementById('suggestions');
+      suggestionsList.innerHTML = '';
+      
+      // 找出最弱的能力
+      const abilities = [
+        { name: '逻辑推理', score: logic, icon: 'fa-lightbulb-o', color: 'text-primary' },
+        { name: '数学能力', score: math, icon: 'fa-calculator', color: 'text-purple-600' },
+        { name: '空间想象', score: spatial, icon: 'fa-cubes', color: 'text-green-600' }
+      ];
+      
+      abilities.sort((a, b) => a.score - b.score);
+      
+      // 为最弱的三个能力生成建议
+      for (let i = 0; i < Math.min(3, abilities.length); i++) {
+        const ability = abilities[i];
+        let suggestion = '';
+        
+        if (ability.score < 30) {
+          suggestion = `您的${ability.name}能力较弱，建议通过专业训练和大量练习来提升。`;
+        } else if (ability.score < 60) {
+          suggestion = `您的${ability.name}能力一般，可以通过相关游戏和练习来提高。`;
+        } else {
+          suggestion = `您的${ability.name}能力良好，继续保持并尝试更具挑战性的任务。`;
+        }
+        
+        const li = document.createElement('li');
+        li.className = 'flex items-start';
+        li.innerHTML = `
+          <i class="fa ${ability.icon} ${ability.color} mt-1 mr-2"></i>
+          <span>${suggestion}</span>
+        `;
+        suggestionsList.appendChild(li);
+      }
+    }
+
+    // 绘制雷达图
+    function drawRadarChart(logic, math, spatial, problemSolving) {
+      const ctx = document.getElementById('radar-chart').getContext('2d');
+      
+      // 销毁已存在的图表
+      if (window.radarChart) {
+        window.radarChart.destroy();
+      }
+      
+      // 创建新图表
+      window.radarChart = new Chart(ctx, {
+        type: 'radar',
+        data: {
+          labels: ['逻辑推理', '数学能力', '空间想象', '问题解决'],
+          datasets: [{
+            label: '您的能力',
+            data: [logic, math, spatial, problemSolving],
+            backgroundColor: 'rgba(59, 130, 246, 0.2)',
+            borderColor: 'rgba(59, 130, 246, 1)',
+            borderWidth: 2,
+            pointBackgroundColor: 'rgba(59, 130, 246, 1)',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgba(59, 130, 246, 1)'
+          }, {
+            label: '平均水平',
+            data: [50, 50, 50, 50],
+            backgroundColor: 'rgba(156, 163, 175, 0.2)',
+            borderColor: 'rgba(156, 163, 175, 1)',
+            borderWidth: 1,
+            pointBackgroundColor: 'rgba(156, 163, 175, 1)',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgba(156, 163, 175, 1)'
+          }]
+        },
+        options: {
+          scales: {
+            r: {
+              angleLines: {
+                display: true
+              },
+              suggestedMin: 0,
+              suggestedMax: 100
+            }
+          },
+          plugins: {
+            legend: {
+              position: 'bottom'
+            }
+          }
+        }
+      });
+    }
+  </script>
+</body>
+</html>
